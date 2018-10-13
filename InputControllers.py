@@ -71,7 +71,7 @@ class KeyboardController():
                 self.game.selection_controller.get_control_group(key - 48)
                 
         if key == 32: #space
-            x = Unit(self.game.game.world, 50, 50)
+            x = Unit(self.game.world, 50, 50)
         
     def key_released(self, key):
         self.key_states[key] = False

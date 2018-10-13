@@ -1,20 +1,25 @@
 import math, weakref, pygame
 import Utility
 
+class MovementQueue():
+    def __init__(self, unit):
+        self.unit = unit
+        self.has_next_move = False
+        self.
+
+
 class Unit():    
     def __init__(self, world, x, y):
         self.world = world
         self.world.all_units.add(self)
-        
         self.x = x
         self.y = y
         self.x_velocity = 0
         self.y_velocity = 0
-        
         self.direction = 0
-
         self.MAX_SPEED = 100
-        self.size = 50
+        self.size = 20
+        self.move_queue = []
         self.destination = (self.x, self.y)
         self.target = None
         
@@ -25,9 +30,9 @@ class Unit():
             self.x += self.x_velocity * dt
             self.y += self.y_velocity * dt
 
-
     def set_destination(self, x, y):
-        self.destination = (x, y)
+        self.move_queue.clear()
+        self.destination = (x, y) 
         self.direction = math.atan2(y - self.y, x - self.x) * 180 / math.pi
         self.start_moving()
 
@@ -50,7 +55,8 @@ class Unit():
     def stop(self):
         self.x_velocity = 0
         self.y_velocity = 0
-        self.destination = (round(self.x), round(self.y))
+        self.destination.clear()
+        self.
 
     def start_moving(self):
         self.x_velocity = self.MAX_SPEED * math.cos(math.radians(self.direction))
