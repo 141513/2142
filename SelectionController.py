@@ -52,12 +52,12 @@ class SelectionController():
     def set_destination(self, position):
         for game_object in self.selection:
             if isinstance(game_object, Unit):
-                game_object.set_destination(position[0], position[1])
+                game_object.movement_queue.set_destination(position[0], position[1])
 
-    def add_to_destination(self, position):
+    def add_destination(self, position):
         for game_object in self.selection:
             if isinstance(game_object, Unit):
-                game_object.add_to_move(position[0], position[1])
+                game_object.movement_queue.add_destination(position[0], position[1])
                 
     def get_control_group(self, number):
         if number >=0 and number <= 9:

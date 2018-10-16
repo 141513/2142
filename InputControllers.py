@@ -22,7 +22,13 @@ class MouseController():
             
         if button == 3:
             if self.game.selection_controller.selection != None:
-                self.game.selection_controller.set_destination(position)
+                if self.game.keyboard_controller.key_states[304] == True:
+                    self.game.selection_controller.add_destination(position)
+                else:
+                    self.game.selection_controller.set_destination(position)
+
+
+                
                 
     def mouse_release(self, button, position):
         self.button_states[button] = False
@@ -72,6 +78,9 @@ class KeyboardController():
                 
         if key == 32: #space
             x = Unit(self.game.world, 50, 50)
+
+        if key == 27:
+            self.game.selection_controller.clear_selection()
         
     def key_released(self, key):
         self.key_states[key] = False

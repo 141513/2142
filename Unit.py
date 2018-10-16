@@ -5,13 +5,43 @@ class MovementQueue():
     def __init__(self, unit):
         self.unit = unit
         self.has_next_move = False
-        self.
+        self.queue = []
+        self.current_destination = (self.unit.x, self.unit.y)
 
+    def add_destination(self, x, y):
+        self.queue.append((x,y))
+        
+    def clear(self):
+        self.queue.clear()
+
+    def next_destination(self):
+        if len(self.queue) == 0:
+            self.unit.stop()
+        else:
+            x = self.queue[0][0]
+            y = self.queue[0][1]
+            self.current_destination = (x, y) 
+            self.unit.direction = math.atan2(y - self.unit.y, x - self.unit.x) * 180 / math.pi
+            self.unit.start_moving()
+            del self.queue[0]
+
+    def set_destination(self, x, y):
+        self.queue.clear()
+        self.current_destination = (x, y) 
+        self.unit.direction = math.atan2(y - self.unit.y, x - self.unit.x) * 180 / math.pi
+        self.unit.start_moving()
+
+    def has_reached_destination(self):
+        if Utility.distance(self.current_destination[0], self.current_destination[1], self.unit.x, self.unit.y) <= 3:
+            return True
+        else:
+            return False
 
 class Unit():    
     def __init__(self, world, x, y):
         self.world = world
         self.world.all_units.add(self)
+        self.current_destination = None
         self.x = x
         self.y = y
         self.x_velocity = 0
@@ -19,26 +49,28 @@ class Unit():
         self.direction = 0
         self.MAX_SPEED = 100
         self.size = 20
-        self.move_queue = []
-        self.destination = (self.x, self.y)
-        self.target = None
+        self.movement_queue = MovementQueue(self)
         
     def update(self, dt):
-        if Utility.distance(self.destination[0], self.destination[1], self.x, self.y) <= 3:
-            self.stop()
-        else:
-            self.x += self.x_velocity * dt
-            self.y += self.y_velocity * dt
-
-    def set_destination(self, x, y):
-        self.move_queue.clear()
-        self.destination = (x, y) 
-        self.direction = math.atan2(y - self.y, x - self.x) * 180 / math.pi
-        self.start_moving()
+        if self.movement_queue.has_reached_destination():
+            self.movement_queue.next_destination()
+        self.x += self.x_velocity * dt
+        self.y += self.y_velocity * dt
 
     def render(self, window):
         pygame.draw.polygon(window, (50,250,50), self.getTriangleCoordinates())
-        pygame.draw.circle(window, (255,255,255), self.destination, 3)
+
+        pygame.draw.circle(window, (50, 50, 200), self.movement_queue.current_destination, 3)
+        pygame.draw.line(window, (50, 50, 200), (self.x, self.y), self.movement_queue.current_destination)
+
+        if len(self.movement_queue.queue) > 0:
+            pygame.draw.line(window, (255,255,255), self.movement_queue.current_destination, self.movement_queue.queue[0])
+
+        for destination in self.movement_queue.queue:
+            pygame.draw.circle(window, (255,255,255), destination, 3)
+        for i in range(len(self.movement_queue.queue) - 1):
+            pygame.draw.line(window, (255,255,255), self.movement_queue.queue[i], self.movement_queue.queue[i + 1] )
+
         pygame.draw.circle(window, (255,0,0), (round(self.x), round(self.y)), 3)
 
     def getTriangleCoordinates(self):
@@ -55,8 +87,7 @@ class Unit():
     def stop(self):
         self.x_velocity = 0
         self.y_velocity = 0
-        self.destination.clear()
-        self.
+        self.movement_queue.clear()
 
     def start_moving(self):
         self.x_velocity = self.MAX_SPEED * math.cos(math.radians(self.direction))

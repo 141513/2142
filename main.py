@@ -10,7 +10,6 @@ from GUIController import GUIController
 from World import World
 from Unit import Unit
 
-
 class Game():
     def __init__(self):
         self.initializePygameElements()
@@ -90,7 +89,7 @@ class Game():
 game = Game()
 
 x = Unit(game.world, 50, 50)
-x.set_destination(500,200)
+x.movement_queue.add_destination(500,200)
 
 lastFrameTime = 0
 IS_RUNNING = True
