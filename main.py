@@ -15,8 +15,8 @@ class Game():
         self.initializePygameElements()
         self.initializeControllers()
         self.world = World(self)
-        self.owned_units = set()
-        self.owned_structures = set()
+        self.all_units = set()
+        self.all_structures = set()
 
     def initializeControllers(self):
         self.keyboard_controller = KeyboardController(self)
@@ -30,7 +30,7 @@ class Game():
         pygame.mixer.init()
         self.clock = pygame.time.Clock()
         self.font = pygame.font.Font(None, 30)
-        self.window = pygame.display.set_mode(Constants.WINDOW_SIZE)
+        self.window = pygame.display.set_mode((Constants.WINDOW_WIDTH, Constants.WINDOW_HEIGHT))
 
     def mainLoop(self, dt):
         self.getInput()
@@ -58,18 +58,20 @@ class Game():
         if dt > 1:
             return
         else:
-            for structure in self.world.all_structures:
+            for structure in self.all_structures:
                 structure.update(dt)
-            for unit in self.world.all_units:
+            for unit in self.all_units:
                 unit.update(dt)
                 
     def drawGraphics(self):
         self.window.fill( (0,0,0) )
 
-        for structure in self.world.all_structures:
+        for structure in self.all_structures:
             structure.render(self.window)
-        for unit in self.world.all_units:
+            
+        for unit in self.all_units:
             unit.render(self.window)
+            
         #for GUI_element in self.GUI.all_elements:
         #    GUI_element.render(self.window)
         
@@ -88,8 +90,10 @@ class Game():
 
 game = Game()
 
-x = Unit(game.world, 50, 50)
-x.movement_queue.add_destination(500,200)
+x = Unit(game.world, 50, 150)
+x = Unit(game.world, 50, 300)
+x = Unit(game.world, 50, 450)
+x = Unit(game.world, 50, 600)
 
 lastFrameTime = 0
 IS_RUNNING = True

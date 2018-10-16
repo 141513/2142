@@ -6,13 +6,14 @@ class MovementQueue():
         self.unit = unit
         self.has_next_move = False
         self.queue = []
-        self.current_destination = (self.unit.x, self.unit.y)
+        self.current_destination = (round(self.unit.x), round(self.unit.y))
 
     def add_destination(self, x, y):
         self.queue.append((x,y))
         
     def clear(self):
         self.queue.clear()
+        self.current_destination = (round(self.unit.x), round(self.unit.y))
 
     def next_destination(self):
         if len(self.queue) == 0:
@@ -40,14 +41,14 @@ class MovementQueue():
 class Unit():    
     def __init__(self, world, x, y):
         self.world = world
-        self.world.all_units.add(self)
+        self.world.game.all_units.add(self)
         self.current_destination = None
         self.x = x
         self.y = y
         self.x_velocity = 0
         self.y_velocity = 0
         self.direction = 0
-        self.MAX_SPEED = 100
+        self.MAX_SPEED = 50
         self.size = 20
         self.movement_queue = MovementQueue(self)
         

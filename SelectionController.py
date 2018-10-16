@@ -37,7 +37,7 @@ class SelectionController():
             start[1] = point2[1]
             end[1] = point1[1] 
     
-        for unit in self.game.world.all_units:
+        for unit in self.game.all_units:
             if unit.x > start[0] and unit.x < end[0]:
                 if unit.y > start[1] and unit.y < end[1]:
                     objects_to_select.append(unit)
@@ -70,6 +70,10 @@ class SelectionController():
             print("Created control group ", number)
         else:
             print("Invalid control group number.")
+
+    def stop(self):
+        for game_object in self.selection:
+            game_object.stop()
     
         
 
