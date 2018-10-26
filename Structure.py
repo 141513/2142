@@ -20,4 +20,10 @@ class Structure():
     def select(self):
         print("Building at ", row, ".", column, " selected.")
 
+
+class Radar(Structure):
+    def __init__(self, world, column, row):
+        super().__init__(world, column, row)
+        self.range = 50
+
         

@@ -25,8 +25,6 @@ class World():
     def get_tile_at(self, column, row):
         if column >= 0 and column < Constants.MAP_WIDTH and row >= 0 and row < Constants.MAP_HEIGHT:
             return self.grid[column][row]
-        else:
-            print("The tile you are trying to get does not exist.")
 
     def build(self, structure_to_build, grid_coordinates):
         instansiated_structure = eval(structure_to_build + "(self," + str(grid_coordinates[0]) + "," + str(grid_coordinates[1]) + ")") 

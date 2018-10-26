@@ -1,4 +1,4 @@
-from Unit import Unit
+from Unit import *
 import Utility
 import pygame
 
@@ -90,6 +90,9 @@ class KeyboardController():
             self.game.mouse_controller.currently_building = "Structure"
             print("Started building a structure.")
 
+        if key == 122: #z
+            x = RandomMover(self.game.world, 100, 100)
+            
         if key == 115: #s
             self.game.selection_controller.stop()
         

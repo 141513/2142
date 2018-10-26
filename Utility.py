@@ -9,3 +9,22 @@ def pixel_to_grid(x, y):
         return (int(x/Constants.GRID_SIZE), int(y/Constants.GRID_SIZE))
     else:
         raise Exception
+
+def get_start_of_bounding_box(point1, point2):
+    start = [0,0]
+    end = [0,0]
+    if point1[0] < point2[0]:
+        start[0] = point1[0]
+        end[0] = point2[0]
+    else:
+        start[0] = point2[0]
+        end[0] = point1[0]
+    if point1[1] < point2[1]:
+        start[1] = point1[1]
+        end[1] = point2[1]
+    else:
+        start[1] = point2[1]
+        end[1] = point1[1]
+
+    return start, end
+    

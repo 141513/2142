@@ -1,6 +1,32 @@
-import math, weakref, pygame
+import math, weakref, pygame, random, Constants
 import Utility
 
+
+        
+class Squad():
+    def __init__(self, list_of_units):
+        self.list_of_units = list_of_units
+        self.average_position = self.get_average_position()
+
+    def move(self, position):
+        pass
+
+    def get_average_position(self):
+        position = [0,0]
+        for unit in self.list_of_units:
+            position[0] += unit.x
+            position[1] += unit.y
+        position[0] = position[0] / len(self.list_of_units)
+        position[1] = position[1] / len(self.list_of_units)
+        return position
+
+    def render(self, window):
+        pass
+
+    def update(self, dt):
+        self.average_position = self.get_average_position()
+
+                
 class MovementQueue():
     def __init__(self, unit):
         self.unit = unit
@@ -96,6 +122,19 @@ class Unit():
         
         
 
+class RandomMover(Unit):
+    def __init__(self, world, x, y):
+        super().__init__(world, x, y)
 
+    def getRandomDestination(self):
+       return (random.randint(0, Constants.WINDOW_WIDTH), random.randint(0, Constants.WINDOW_HEIGHT))
+
+    def setRandomDestination(self):
+        self.movement_queue.set_destination(self.getRandomDestination()[0], self.getRandomDestination()[1])
+
+    def update(self, dt):
+        super().update(dt)
+        if(random.randint(0, random.randint(0, 100)) == random.randint(0, 100)):
+            self.setRandomDestination()
         
     
